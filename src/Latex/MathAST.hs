@@ -1,3 +1,11 @@
+{-|
+Module      : Latex.MathAST
+Description :  Defines an AST
+
+This module defines an Abstract Syntax Tree for math expressions in a latex format.
+-}
+
+
 module Latex.MathAST
   ( toLatex
   ) where

@@ -1,3 +1,12 @@
+{-|
+Module      : Data.MathAST
+Description :  Defines an AST for math expressions
+
+This module defines an Abstract Syntax Tree for the parsed expressions in
+a traditional math format.
+-}
+
+
 module Data.MathAST
   ( parseExpr
   , Number
@@ -9,13 +18,13 @@ module Data.MathAST
 import           Control.Applicative
 import           Data.Parser
 
--- the function used to parse a string into an abstract syntax tree
+-- | the function 'parseExpr' parses a string into an abstract syntax tree
 --parseExpr :: String -> Parser Expr
 parseExpr input = ast
   where (ast, []):_ = parse expr input
 
 
--- the abstract syntax tree datatypes
+-- | the abstract syntax tree datatypes
 type Number = Int
 
 data Expr = ExprVal Term
@@ -34,6 +43,7 @@ data Factor = FactorVal Number
 
 
 -- the parser combinators
+-- | Expression combinator
 expr :: Parser Expr
 expr = do
   t <- term
@@ -47,6 +57,7 @@ expr = do
     return (Sub t e)
     <|> return (ExprVal t)
 
+-- | Term level combinator
 term :: Parser Term
 term = do
   f <- factor
@@ -60,6 +71,7 @@ term = do
     return (Div f t)
     <|> return (TermVal f)
 
+-- | Factor level combinator
 factor :: Parser Factor
 factor = do
   symbol '('

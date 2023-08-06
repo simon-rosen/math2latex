@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Test.Hspec
 import Test.QuickCheck
 
@@ -34,3 +35,7 @@ bigExpressionsSpec = do
   describe "big expressions" $ do
     it "large complex expression" $ do
       pending
+=======
+main :: IO ()
+main = putStrLn "Test suite not yet implemented"
+>>>>>>> ab45cd1 (Changed documentation to the Haddock format.)
