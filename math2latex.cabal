@@ -27,6 +27,7 @@ library
   exposed-modules:
       Data.MathAST
       Data.Parser
+      Dot.MathAST
       Latex.MathAST
   other-modules:
       Paths_math2latex
