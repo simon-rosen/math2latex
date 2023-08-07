@@ -1,3 +1,12 @@
+{-|
+Module      : Data.Parser
+Description :  This module defines a generic parser.
+
+This module defines a generic parser that is used to construct more
+specialiced parsers. This parser combines lexing and parsing. Right
+now it only parses integers and one character symbols.
+-}
+
 {-# LANGUAGE LambdaCase #-}
 module Data.Parser
   ( Parser (..)
@@ -6,30 +15,27 @@ module Data.Parser
   , symbol
   ) where
 
-{- About:
- - This module defines a generic parser that is used to construct more specialiced parsers.
- -
- - This parser combines lexing and parsing.
- -
- -  Right now it only parses integers and one character symbols
- - -}
-
 import           Control.Applicative
 import           Data.Char
 
--- a parser takes a string and returns a parsed value along with the
--- rest of the string.
---
--- to allow it to be a part of classes it is defined as newtype
-newtype Parser a = Parser (String -> [(a, String)])
+{-|
+    A parser takes a string and returns a parsed value along with the
+    rest of the string.
 
--- this function applies a parser to a input string
--- (removes the constructor)
+    To allow it to be a part of classes it is defined as newtype
+-}
+newtype Parser a = Parser (String -> [(a, String)])
+{-|
+   the 'parse' function applies a parser to a input string
+   (removes the constructor)
+-}
 parse :: Parser a -> String -> [(a, String)]
 parse (Parser p) = p
 
--- this parsing primitive takes the first character of the input.
--- it fails if the input is empty.
+{-|
+    'item' is a parsing primitive that takes the first character of the input.
+    It fails if the input is empty.
+-}
 item :: Parser Char
 item = Parser (\case -- <-- LambdaCase
                 []     -> []
@@ -79,27 +85,27 @@ instance Alternative Parser where
 
 -- HELPER PARSERS
 -- PARSERS ON THE FIRST CHAR
--- a parser that succeds if the first character fulfills a predicate
+-- | a parser that succeds if the first character fulfills a predicate
 sat :: (Char -> Bool) -> Parser Char
 sat p = do
   x <- item
   if p x then return x else empty
 
--- the first char is
+-- | the first char is
 char :: Char -> Parser Char
 char c = sat (== c)
 
--- the first char is a digit
+-- | the first char is a digit
 digit :: Parser Char
 digit = sat isDigit
 
--- PARSERS ON MULTIPLE CHARACTERS
+-- | PARSERS ON MULTIPLE CHARACTERS
 whitespace :: Parser ()
 whitespace = do
   _ <- many (sat isSpace)
   return ()
 
--- this applies a parser and ignores whitespace before and after it
+-- | this applies a parser and ignores whitespace before and after it
 token :: Parser a -> Parser a
 token p = do
   whitespace
@@ -107,13 +113,13 @@ token p = do
   whitespace
   return v
 
--- a natural number is at least one digit
+-- | a natural number is at least one digit
 nat :: Parser Int
 nat = token $ do
   xs <- some digit
   return (read xs)
 
--- an integer can have i '-' in front of a natural number
+-- | an integer can have i '-' in front of a natural number
 int :: Parser Int
 int = token $ do
   _ <- char '-'
@@ -121,7 +127,7 @@ int = token $ do
   return (-n)
   <|> nat
 
--- a symbol is parsed (could be sorounded by whitespace)
+-- | a symbol is parsed (could be sorounded by whitespace)
 symbol :: Char -> Parser Char
 symbol c = token $ do char c
 
