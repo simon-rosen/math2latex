@@ -1,8 +1,7 @@
 module Main (main) where
 
-import           Data.MathAST
-import           Data.Parser
-import           Latex.MathAST
+import           Latex
+import           MathAST
 
 main :: IO ()
 main = do
