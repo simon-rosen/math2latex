@@ -7,4 +7,5 @@ main :: IO ()
 main = do
   input <- getLine
   let ast = parseExpr input
-  putStrLn (toLatex ast)
+  putStrLn $ (toLatex ast) <> " = " <> show (eval ast)
+
